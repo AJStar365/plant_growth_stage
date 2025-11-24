@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>🌱 Plant Growth Stage Detector</title>
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>🌱 AI-Powered Plant Growth Stage Detector</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" name="plant_image" required>
+      <button type="submit">Upload & Detect</button>
+    </form>
+
+    {% if prediction %}
+      <div class="result">
+        <h2>Predicted Stage: {{ prediction }}</h2>
+        <img src="{{ img_url }}" width="300">
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
