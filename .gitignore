@@ -5,28 +5,33 @@
 # Django stuff
 db.sqlite3
 *.log
+plant_growth_stage1/
 
-# Media files
-# uploads/
-*.jpg
-*.h5
-*.zip
-
-# Python stuff
+# Generated files and temporary data
 __pycache__/
 *.pyc
+*.sqlite3
 
-# IDE stuff
-.idea/
-.vscode/
+# Uploaded media
+uploads/
+nyckel_info.txt # Sensitive API keys
 
-# dataset
-dataset/
-dataset_resized/
+# Models and large data files
+*.h5
 best_plant_growth_stage.h5
 plant_growth_stage.h5
-plant_app (2).zip
-plant_app.zip
-Read_me.txt
-db.sqlite3
-plant_growth_stage1/
+best_plant_growth_stage_finetuned.h5
+
+# Datasets (should not be in VCS)
+dataset/
+dataset_resized/
+dataset_resized_old/
+
+# Archives and backups
+*.zip
+*.tar.gz
+*.rar
+
+# IDE/Editor specific files
+.idea/
+.vscode/
