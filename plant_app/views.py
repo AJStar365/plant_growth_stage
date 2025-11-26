@@ -100,9 +100,11 @@ def _classify_image_with_nyckel(image_bytes, filename="unknown.jpg"):
         return None, None
 
 def index(request):
-    prediction = None
+    prediction = None # Keep prediction for now, can be removed later if not used
     confidence = None
     img_url = None
+    stage = None # Ensure stage is initialized for template context
+    error_message = None # Initialize error message
 
     if request.method == "POST" and request.FILES.get("plant_image"):
         uploaded_file = request.FILES["plant_image"]
@@ -117,26 +119,29 @@ def index(request):
         if request.POST.get("use_nyckel") == "on":
             stage, confidence = _classify_image_with_nyckel(image_bytes, filename)
             if stage and confidence is not None:
-                prediction = f"{stage} ({confidence:.2f})"
+                pass # stage and confidence are already set
             else:
-                prediction = "Nyckel API failed to classify."
+                error_message = "Nyckel API failed to classify the image. Check console for details."
         else:
-            # Preprocess for local model
-            img_path = os.path.join(fs.location, filename)
-            img = image.load_img(img_path, target_size=(224, 224))
-            img_array = image.img_to_array(img) / 255.0
-            img_array = np.expand_dims(img_array, axis=0)
+            try:
+                # Preprocess for local model
+                img_path = os.path.join(fs.location, filename)
+                img = image.load_img(img_path, target_size=(224, 224))
+                img_array = image.img_to_array(img) / 255.0
+                img_array = np.expand_dims(img_array, axis=0)
 
-            # Prediction with local model
-            preds = model.predict(img_array)
-            stage = CLASS_NAMES[np.argmax(preds)]
-            confidence = float(np.max(preds))
-
-            prediction = f"{stage} ({confidence:.2f})"
+                # Prediction with local model
+                preds = model.predict(img_array)
+                stage = CLASS_NAMES[np.argmax(preds)]
+                confidence = float(np.max(preds))
+            except Exception as e:
+                error_message = f"Local model classification failed: {e}"
+                stage = None
+                confidence = None
 
     return render(request, "index.html", {
-        "prediction": prediction,
         "img_url": img_url,
         "stage": stage,
-        "confidence": confidence
+        "confidence": confidence,
+        "error_message": error_message
     })
