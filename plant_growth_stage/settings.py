@@ -125,3 +125,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = BASE_DIR / 'uploads'
 
+# Nyckel API Configuration
+NYCKEL_CLIENT_ID = 'lygm6myin2mzo00abyl0qkc8tjoqvxct'
+NYCKEL_CLIENT_SECRET = 'p0sexx3znx4y9puykfpnf4j0l7smx8mpptan7mddumdsgdy3oq5g8pelgssp4h2e'
+NYCKEL_INVOKE_URL = 'https://www.nyckel.com/v1/functions/plant-growth-stages/invoke'
+NYCKEL_TOKEN_URL = 'https://www.nyckel.com/connect/token'
+
+
