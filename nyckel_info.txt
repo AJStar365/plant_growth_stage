@@ -1,0 +1,51 @@
+Invoke
+POST v1/functions/plant-growth-stages/invoke
+Request
+Send URL
+Send Image Bytes
+Invoke with an image URL using the application/json content type.
+
+Header
+accessToken	A JWT issued to your application by the Nyckel identity provider	
+Body
+data	A URL pointing to the image. A data URI is also accepted.	
+python sdk
+curl
+python
+javascript
+php
+import requests
+
+url = 'https://www.nyckel.com/v1/functions/plant-growth-stages/invoke'
+headers = {
+    'Authorization': 'Bearer ' + 'eyJhbGciOiJSUzI1NiIsInR5cCI6ImF0K2p3dCJ9.eyJpc3MiOiJodHRwczovL3d3dy5ueWNrZWwuY29tIiwibmJmIjoxNzY0MDA3ODY4LCJpYXQiOjE3NjQwMDc4NjgsImV4cCI6MTc2NDAxMTQ2OCwic2NvcGUiOlsiYXBpIl0sImNsaWVudF9pZCI6Imx5Z202bXlpbjJtem8wMGFieWwwcWtjOHRqb3F2eGN0IiwianRpIjoiQjg3Q0NEMUE3NEYyNjVBOEM4MjZDMEQ3MzA3NTBCMjgifQ.G_JrKtXgQSb09lbB43CjMeP3ldrJzHTV7fqc-FTD520JiWHzOpnT3HI_vbX1IGTtfRwLuqavoLO-iomSQEY5GFw1So27sfgHhdnZJmyzv12mpME1FS88Rr0dz4cd_GTkBF6-pHmDxR_wzp2Vj8gg75piLATqXx0q4b0ZwKDRk6j7dXGTGQ-2uexhHR5avlcU_S0EqWPSbaqbUN2niAZJefhsEwHxppvH6lG_TXdr6KyS7LwyclvihB_c3jVSgKjgCQTaUMYcfaMUEQSyC4xwu1iKLUfWWVRPjnMt-70Boc6FSrlDRGz2M_r9GGgZf3_rJLafRFiRuXLVFvbM65Jg0w',
+}
+
+result = requests.post(url, headers=headers, json={"data":"https://www.nyckel.com/assets/example.jpg"})
+print(result.text)
+Response
+Create an access token
+POST connect/token
+Request
+Body
+client_id	The ClientId associated with your user account.	
+Body
+client_secret	The ClientSecret associated with your user account.	
+curl
+python
+javascript
+php
+curl -X POST \
+  -H 'Content-Type: application/x-www-form-urlencoded' \
+  -d 'grant_type=client_credentials&client_id=lygm6myin2mzo00abyl0qkc8tjoqvxct&client_secret=p0sexx3znx4y9puykfpnf4j0l7smx8mpptan7mddumdsgdy3oq5g8pelgssp4h2e' \
+  'https://www.nyckel.com/connect/token'
+Response
+access_token	A securty token that can be used to authorize API requests.
+token_type	The type of token. The value will be Bearer for Nyckel functions.
+expires_in	The number of seconds before the provided access_token expires.
+Example Response
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6ImF0K2p3dCJ9.eyJpc3MiOiJodHRwczovL3d3dy5ueWNrZWwuY29tIiwibmJmIjoxNzY0MDA3ODY4LCJpYXQiOjE3NjQwMDc4NjgsImV4cCI6MTc2NDAxMTQ2OCwic2NvcGUiOlsiYXBpIl0sImNsaWVudF9pZCI6Imx5Z202bXlpbjJtem8wMGFieWwwcWtjOHRqb3F2eGN0IiwianRpIjoiQjg3Q0NEMUE3NEYyNjVBOEM4MjZDMEQ3MzA3NTBCMjgifQ.G_JrKtXgQSb09lbB43CjMeP3ldrJzHTV7fqc-FTD520JiWHzOpnT3HI_vbX1IGTtfRwLuqavoLO-iomSQEY5GFw1So27sfgHhdnZJmyzv12mpME1FS88Rr0dz4cd_GTkBF6-pHmDxR_wzp2Vj8gg75piLATqXx0q4b0ZwKDRk6j7dXGTGQ-2uexhHR5avlcU_S0EqWPSbaqbUN2niAZJefhsEwHxppvH6lG_TXdr6KyS7LwyclvihB_c3jVSgKjgCQTaUMYcfaMUEQSyC4xwu1iKLUfWWVRPjnMt-70Boc6FSrlDRGz2M_r9GGgZf3_rJLafRFiRuXLVFvbM65Jg0w",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}

@@ -1,0 +1,47 @@
+✅ Final model saved as plant_growth_stage.h5
+
+
+Classification Report:
+                  precision    recall  f1-score   support
+
+       Flowering       0.93      0.93      0.93        15
+   Fruiting_Ripe       0.72      0.97      0.82        29
+ Fruiting_Unripe       0.92      0.72      0.81        64
+        Seedling       0.93      0.76      0.84        17
+Vegetative_Early       0.71      1.00      0.83        25
+ Vegetative_Late       1.00      0.83      0.91        18
+
+        accuracy                           0.84       168
+       macro avg       0.87      0.87      0.86       168
+    weighted avg       0.87      0.84      0.84       168
+
+    new
+
+    Classification Report:
+                  precision    recall  f1-score   support
+
+       Flowering       0.80      0.80      0.80        15
+   Fruiting_Ripe       0.76      0.97      0.85        29
+ Fruiting_Unripe       0.98      0.73      0.84        64
+        Seedling       0.88      0.88      0.88        17
+Vegetative_Early       0.78      1.00      0.88        25
+ Vegetative_Late       0.79      0.83      0.81        18
+
+        accuracy                           0.85       168
+       macro avg       0.83      0.87      0.84       168
+    weighted avg       0.87      0.85      0.84       168
+
+    new
+    Classification Report:
+                  precision    recall  f1-score   support
+
+       Flowering       0.88      0.93      0.90        15
+   Fruiting_Ripe       0.77      0.93      0.84        29
+ Fruiting_Unripe       0.94      0.73      0.82        64
+        Seedling       1.00      0.88      0.94        17
+Vegetative_Early       0.74      1.00      0.85        25
+ Vegetative_Late       0.89      0.89      0.89        18
+
+        accuracy                           0.86       168
+       macro avg       0.87      0.89      0.87       168
+    weighted avg       0.88      0.86      0.86       168

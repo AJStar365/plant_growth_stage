@@ -1,0 +1,17 @@
+File: train_model.py
+Changes:
+- Replaced MobileNetV2 with InceptionV3 as the base model for transfer learning.
+- Adjusted the fine-tuning strategy to be more cautious for a smaller dataset. After initial training of the classifier head, the top two Inception blocks (from layer 249 onwards) are unfrozen for fine-tuning with a low learning rate.
+- To diagnose training issues, temporarily removed data augmentation (rotation, zoom, etc.) from the training data generator, leaving only pixel rescaling.
+- Increased the initial learning rate from 0.0001 to 0.001 to help the model escape a poor local minimum.
+- Implemented separate `ModelCheckpoint` callbacks for the initial training and fine-tuning phases, saving to `best_plant_growth_stage.h5` and `best_plant_growth_stage_finetuned.h5` respectively. This resolves the `OSError: [Errno 22] Invalid argument` file access error during training.
+- Corrected an `IndentationError` in the fine-tuning `model.fit()` call to fix a syntax error preventing script execution.
+
+File: plant_app/views.py
+Changes:
+- Updated the model loaded from "plant_growth_stage.h5" to "plant_growth-stage.h5" to use the newly trained model.
+- Corrected the model filename from "plant_growth-stage.h5" back to "plant_growth_stage.h5" to match the training script output and fix a FileNotFoundError.
+
+File: resize_dataset.py
+Changes:
+- Changed the padding color from white (255, 255, 255) to black (0, 0, 0) in the `resize_and_pad` function. This provides a more neutral background for pre-trained models.

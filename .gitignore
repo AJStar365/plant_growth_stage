@@ -1,0 +1,31 @@
+# Virtual environments
+.venv/
+.wenv/
+
+# Django stuff
+db.sqlite3
+
+# Media files
+# uploads/
+*.jpg
+*.zip
+
+# Python stuff
+__pycache__/
+*.pyc
+
+# IDE stuff
+.idea/
+.vscode/
+
+# dataset
+dataset/
+dataset_resized/
+plant_app (2).zip
+plant_app.zip
+# Read_me.txt # Un-ignoring readme
+db.sqlite3
+plant_growth_stage1/
+
+# Ignore model files in this branch
+*.h5

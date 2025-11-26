@@ -1,0 +1,3 @@
+  File "C:\Users\ACER NITRO 5\Desktop\group mini project\plant_growth_stage\train_model.py", line 89
+    callbacks=callbacks_finetune
+IndentationError: unexpected indent
