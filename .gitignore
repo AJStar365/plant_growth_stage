@@ -4,7 +4,6 @@
 
 # Django stuff
 db.sqlite3
-*.log
 plant_growth_stage1/
 
 # Generated files and temporary data
