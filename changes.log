@@ -21,6 +21,7 @@ Changes:
 - Added a debug print statement to `_classify_image_with_nyckel` to log the raw JSON response from the Nyckel API.
 - Corrected the parsing logic in `_classify_image_with_nyckel` to handle the Nyckel API response as a dictionary, extracting `labelName` and `confidence` directly. Removed the debug print statement.
 - Modified the `index` view to pass `stage` and `confidence` as separate variables to the template context.
+- Modified the `index` view to initialize `error_message=None` and set `error_message` when classification fails (either local model or Nyckel API), passing it to the template context.
 
 File: resize_dataset.py
 Changes:
@@ -32,6 +33,7 @@ Changes:
 - Implemented a loading indicator (spinner and text) that appears when the "Detect Stage" button is clicked and disappears when the prediction is displayed. The button is also disabled during processing.
 - Modified the prediction display to show the predicted stage and confidence separately, using a Bootstrap progress bar to visually represent the confidence score.
 - Implemented a "No Prediction" state, displaying a friendly message ("Upload an image to get started!") when the page initially loads or if no prediction is available.
+- Modified the prediction box to display a Bootstrap alert if an `error_message` is present in the context, prioritizing error messages over prediction results. Also changed the heading from "Predicted Stage" to "Prediction Result".
 
 File: plant_growth_stage/settings.py
 Changes:
