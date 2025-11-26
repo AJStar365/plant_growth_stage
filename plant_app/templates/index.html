@@ -60,9 +60,12 @@
             </div>
 
             <button type="submit"
+                    id="detectButton"
                     class="btn mt-4 w-100 text-white"
                     style="background-color:#2e7d32; border-radius:30px;">
-              🔍 Detect Stage
+              <span id="buttonText">🔍 Detect Stage</span>
+              <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
+              <span id="loadingText" style="display:none;"> Processing...</span>
             </button>
           </form>
         </div>
@@ -95,6 +98,21 @@
       };
       reader.readAsDataURL(event.target.files[0]);
     }
+
+    // Handle form submission to show loading indicator
+    document.querySelector('form').addEventListener('submit', function() {
+      const detectButton = document.getElementById('detectButton');
+      const buttonText = document.getElementById('buttonText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      const loadingText = document.getElementById('loadingText');
+
+      if (detectButton && buttonText && loadingSpinner && loadingText) {
+        detectButton.disabled = true;
+        buttonText.style.display = 'none';
+        loadingSpinner.style.display = 'inline-block';
+        loadingText.style.display = 'inline-block';
+      }
+    });
   </script>
 </body>
 </html>
