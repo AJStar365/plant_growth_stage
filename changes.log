@@ -20,6 +20,7 @@ Changes:
 - Modified `_classify_image_with_nyckel` function definition to make the `filename` parameter optional with a default value, to help diagnose `TypeError`.
 - Added a debug print statement to `_classify_image_with_nyckel` to log the raw JSON response from the Nyckel API.
 - Corrected the parsing logic in `_classify_image_with_nyckel` to handle the Nyckel API response as a dictionary, extracting `labelName` and `confidence` directly. Removed the debug print statement.
+- Modified the `index` view to pass `stage` and `confidence` as separate variables to the template context.
 
 File: resize_dataset.py
 Changes:
@@ -29,6 +30,7 @@ File: plant_app/templates/index.html
 Changes:
 - Added a checkbox to allow users to select the Nyckel API as a backup classifier.
 - Implemented a loading indicator (spinner and text) that appears when the "Detect Stage" button is clicked and disappears when the prediction is displayed. The button is also disabled during processing.
+- Modified the prediction display to show the predicted stage and confidence separately, using a Bootstrap progress bar to visually represent the confidence score.
 
 File: plant_growth_stage/settings.py
 Changes:
