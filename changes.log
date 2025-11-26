@@ -33,8 +33,16 @@ Changes:
 - Implemented a loading indicator (spinner and text) that appears when the "Detect Stage" button is clicked and disappears when the prediction is displayed. The button is also disabled during processing.
 - Modified the prediction display to show the predicted stage and confidence separately, using a Bootstrap progress bar to visually represent the confidence score.
 - Implemented a "No Prediction" state, displaying a friendly message ("Upload an image to get started!") when the page initially loads or if no prediction is available.
-- Modified the prediction box to display a Bootstrap alert if an `error_message` is present in the context, prioritizing error messages over prediction results. Also changed the heading from "Predicted Stage" to "Prediction Result".
+- Modified the prediction box to display a Bootstrap alert if an `error_message` is present in the context, prioritizing error messages over prediction results. Also changed the heading from "Prediction Result".
+- Corrected the link to `style.css` in the HTML head from `{% static 'css/style.css' %}` to `{% static 'style.css' %}`.
+- Removed inline styles from the `body` and `button` tags, moving them to `style.css` for better separation of concerns.
 
 File: plant_growth_stage/settings.py
 Changes:
 - Added Nyckel API configuration settings (`NYCKEL_CLIENT_ID`, `NYCKEL_CLIENT_SECRET`, `NYCKEL_INVOKE_URL`, `NYCKEL_TOKEN_URL`).
+
+File: plant_app/static/style.css
+Changes:
+- Refactored `body` styles: integrated `linear-gradient` and `font-family` from inline HTML, preserved background image properties, and removed flexbox centering.
+- Refactored `button` styles: integrated `background-color` and `border-radius` from inline HTML.
+- Added a `.navbar` class with the project's theme color to maintain visual consistency.

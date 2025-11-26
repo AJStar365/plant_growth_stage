@@ -1,13 +1,11 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  background: linear-gradient(135deg,#e8f5e9,#f1f8e9); /* Fallback/Overlay */
   background-image: url("https://watchandlearn.scholastic.com/content/dam/classroom-magazines/watchandlearn/videos/animals-and-plants/plants/what-are-plants-/What-Are-Plants.jpg");
-  background-repeat: no-repeat;     /* don't tile the image */
-  background-size: cover;           /* fill container, maintain ratio */
+  background-repeat: no-repeat;
+  background-size: cover;
   background-position: center;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  /* Removed flex centering, as it's better for specific content containers */
 }
 
 .container {
@@ -27,10 +25,10 @@ h1 {
 button {
   margin-top: 10px;
   padding: 10px 20px;
-  background: #6a4014;
+  background-color: #2e7d32; /* From inline style */
   color: rgb(255, 255, 255);
   border: none;
-  border-radius: 10px;
+  border-radius: 30px; /* From inline style */
   cursor: pointer;
 }
 
@@ -41,4 +39,8 @@ button:hover {
 
 .result {
   margin-top: 20px;
+}
+
+.navbar {
+  background-color:#2e7d32; /* Match theme color */
 }
