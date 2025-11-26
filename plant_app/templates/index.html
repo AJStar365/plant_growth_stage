@@ -72,10 +72,10 @@
       </div>
 
       <!-- Prediction Box -->
-      {% if prediction %}
       <div class="col-md-4">
         <div class="card p-4 text-center shadow-sm rounded-4">
           <h5 class="mb-3">Predicted Stage</h5>
+          {% if stage %}
           <div class="fw-bold text-success border rounded p-3"
                style="background:#f9fff9; border:2px solid #2e7d32;">
             <p class="h4 mb-2">{{ stage }}</p>
@@ -88,9 +88,14 @@
               </div>
             {% endif %}
           </div>
+          {% else %}
+          <div class="fw-bold text-muted border rounded p-3"
+               style="background:#f9fff9; border:2px solid #bdbdbd;">
+            <p class="h5 mb-0">Upload an image to get started!</p>
+          </div>
+          {% endif %}
         </div>
       </div>
-      {% endif %}
     </div>
   </div>
 
