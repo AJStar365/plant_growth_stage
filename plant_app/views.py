@@ -136,5 +136,7 @@ def index(request):
 
     return render(request, "index.html", {
         "prediction": prediction,
-        "img_url": img_url
+        "img_url": img_url,
+        "stage": stage,
+        "confidence": confidence
     })
