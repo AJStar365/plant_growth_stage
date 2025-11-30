@@ -37,6 +37,7 @@ Changes:
 - Corrected the link to `style.css` in the HTML head from `{% static 'css/style.css' %}` to `{% static 'style.css' %}`.
 - Removed inline styles from the `body` and `button` tags, moving them to `style.css` for better separation of concerns.
 - Added `text-shadow` to the main `h2` title to improve its contrast and readability against the background image.
+- Removed the `text-white` class from the "Detect Stage" button to allow the inline black color style to apply correctly.
 
 File: plant_growth_stage/settings.py
 Changes:
@@ -48,3 +49,4 @@ Changes:
 - Refactored `button` styles: integrated `background-color` and `border-radius` from inline HTML.
 - Reverted `.container` background opacity, `h1, h2` color override, and `.navbar` background style to restore original aesthetics.
 - Added a new `.main-title-color` class for custom color selection, applied to the `h2` main title, and set its color to brown (`rgb(68, 28, 11)`).
+- Added `!important` to the `.main-title-color` class to ensure it overrides any conflicting styles.
