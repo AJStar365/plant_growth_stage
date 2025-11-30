@@ -5,8 +5,13 @@
 {% block content %}
 <div class="row mb-4">
   <div class="col-12">
-    <h2 class="text-success">Dashboard</h2>
-    <p class="text-muted">Welcome back, {{ user.username }}! Here's your activity overview.</p>
+    {% if viewing_user %}
+      <h2 class="text-success">Admin View: {{ viewing_user.username }}'s Dashboard</h2>
+      <p class="text-muted">Viewing prediction history for user {{ viewing_user.username }}.</p>
+    {% else %}
+      <h2 class="text-success">Dashboard</h2>
+      <p class="text-muted">Welcome back, {{ user.username }}! Here's your activity overview.</p>
+    {% endif %}
   </div>
 </div>
 

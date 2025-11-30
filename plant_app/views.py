@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.files.storage import FileSystemStorage
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
@@ -10,9 +10,10 @@ from django.conf import settings
 import base64
 import time
 from .models import Prediction
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db.models import Count
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 
 # Global variable to cache Nyckel access token
 nyckel_access_token = {
@@ -187,3 +188,29 @@ def signup(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_dashboard(request):
+    users = User.objects.all()
+    return render(request, 'admin_dashboard.html', {'users': users})
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_user_dashboard(request, user_id):
+    target_user = get_object_or_404(User, pk=user_id)
+    
+    # Get target user's predictions
+    user_predictions = Prediction.objects.filter(user=target_user).order_by('-created_at')
+
+    # Aggregate data for chart
+    stage_counts = user_predictions.values('predicted_stage').annotate(count=Count('predicted_stage'))
+    
+    # Prepare data for Chart.js
+    chart_labels = [item['predicted_stage'] for item in stage_counts]
+    chart_data = [item['count'] for item in stage_counts]
+
+    return render(request, "dashboard.html", {
+        "predictions": user_predictions,
+        "chart_labels": json.dumps(chart_labels),
+        "chart_data": json.dumps(chart_data),
+        "viewing_user": target_user # To show who we are viewing
+    })

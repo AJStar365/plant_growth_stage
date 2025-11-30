@@ -22,6 +22,8 @@ Changes:
 - Corrected the parsing logic in `_classify_image_with_nyckel` to handle the Nyckel API response as a dictionary, extracting `labelName` and `confidence` directly. Removed the debug print statement.
 - Modified the `index` view to pass `stage` and `confidence` as separate variables to the template context.
 - Modified the `index` view to initialize `error_message=None` and set `error_message` when classification fails (either local model or Nyckel API), passing it to the template context.
+- Implemented `admin_dashboard` view to list all users (superuser only).
+- Implemented `admin_user_dashboard` view to show a specific user's prediction dashboard (superuser only).
 
 File: resize_dataset.py
 Changes:
@@ -50,3 +52,15 @@ Changes:
 - Reverted `.container` background opacity, `h1, h2` color override, and `.navbar` background style to restore original aesthetics.
 - Added a new `.main-title-color` class for custom color selection, applied to the `h2` main title, and set its color to brown (`rgb(68, 28, 11)`).
 - Added `!important` to the `.main-title-color` class to ensure it overrides any conflicting styles.
+
+File: plant_app/templates/admin_dashboard.html
+Changes:
+- Created a new template to display a table of all registered users, including their details and a link to view their individual prediction dashboard.
+
+File: plant_app/templates/dashboard.html
+Changes:
+- Updated to conditionally display "Admin View: [Username]'s Dashboard" in the header if accessed by an admin viewing another user's data.
+
+File: plant_app/templates/base.html
+Changes:
+- Added a link to the "Admin" dashboard in the navbar, visible only to superusers.
