@@ -131,4 +131,9 @@ NYCKEL_CLIENT_SECRET = 'p0sexx3znx4y9puykfpnf4j0l7smx8mpptan7mddumdsgdy3oq5g8pel
 NYCKEL_INVOKE_URL = 'https://www.nyckel.com/v1/functions/plant-growth-stages/invoke'
 NYCKEL_TOKEN_URL = 'https://www.nyckel.com/connect/token'
 
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+LOGIN_URL = 'login'
+
+
 

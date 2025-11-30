@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image
@@ -9,6 +9,10 @@ import json
 from django.conf import settings
 import base64
 import time
+from .models import Prediction
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
+from django.contrib.auth.forms import UserCreationForm
 
 # Global variable to cache Nyckel access token
 nyckel_access_token = {
@@ -139,9 +143,47 @@ def index(request):
                 stage = None
                 confidence = None
 
+        # Save prediction if user is logged in and prediction was successful
+        if request.user.is_authenticated and stage:
+            # filename returned by fs.save is relative to MEDIA_ROOT
+            Prediction.objects.create(
+                user=request.user,
+                image=filename, 
+                predicted_stage=stage,
+                confidence=confidence
+            )
+
     return render(request, "index.html", {
         "img_url": img_url,
         "stage": stage,
         "confidence": confidence,
         "error_message": error_message
     })
+
+@login_required
+def dashboard(request):
+    # Get user's predictions
+    user_predictions = Prediction.objects.filter(user=request.user).order_by('-created_at')
+
+    # Aggregate data for chart (e.g., count of each stage)
+    stage_counts = user_predictions.values('predicted_stage').annotate(count=Count('predicted_stage'))
+    
+    # Prepare data for Chart.js
+    chart_labels = [item['predicted_stage'] for item in stage_counts]
+    chart_data = [item['count'] for item in stage_counts]
+
+    return render(request, "dashboard.html", {
+        "predictions": user_predictions,
+        "chart_labels": json.dumps(chart_labels),
+        "chart_data": json.dumps(chart_data)
+    })
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/signup.html', {'form': form})

@@ -23,9 +23,12 @@ h1 { /* Reverted to original */
 }
 
 .main-title-color {
-  color: rgb(68, 28, 11); /* Brown color for the main title */
+  color: rgb(68, 28, 11) !important; /* Brown color for the main title */
 }
 
+h2 { /* Reverted to original */
+  color: #4f2a06;
+}
 button {
   margin-top: 10px;
   padding: 10px 20px;

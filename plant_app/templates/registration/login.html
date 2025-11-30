@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <div class="card p-4 shadow-sm rounded-4">
+      <h3 class="text-center mb-4 text-success">Login</h3>
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="id_username" class="form-label">Username</label>
+          <input type="text" name="username" class="form-control" id="id_username" required>
+        </div>
+        <div class="mb-3">
+          <label for="id_password" class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" id="id_password" required>
+        </div>
+        <button type="submit" class="btn btn-success w-100" style="border-radius: 30px;">Login</button>
+      </form>
+      <div class="text-center mt-3">
+        <p class="mb-1">Don't have an account? <a href="{% url 'signup' %}" class="text-success text-decoration-none">Sign Up</a></p>
+        <p>Or <a href="{% url 'index' %}" class="text-secondary text-decoration-none">Continue as Guest</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
