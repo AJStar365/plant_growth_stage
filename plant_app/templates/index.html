@@ -1,29 +1,7 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌱 Plant Growth Stage Detector</title>
+{% extends 'base.html' %}
 
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-
-  <!-- Your custom CSS (optional overrides) -->
-  <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg" style="background:#2e7d32;">
-    <div class="container">
-      <a class="navbar-brand fw-bold text-white" href="#">🌱 Plant Growth Detector</a>
-    </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container py-5">
-    <h2 class="text-center mb-4 fw-bold text-success">AI-Powered Plant Growth Stage Detector</h2>
+{% block content %}
+    <h2 class="text-center mb-4 fw-bold main-title-color" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">AI-Powered Plant Growth Stage Detector</h2>
     <p class="text-center text-muted mb-5">
       Upload an image of your plant to detect its growth stage using AI technology.
     </p>
@@ -62,7 +40,7 @@
             <button type="submit"
                     id="detectButton"
                     class="btn mt-4 w-100 text-white">
-              <span id="buttonText" style="color:black">🔍 Detect Stage </span>
+              <span id="buttonText"  style="color:black;">🔍 Detect Stage</span>
               <span id="loadingSpinner" class="spinner-border spinner-border-sm" role="status" aria-hidden="true" style="display:none;"></span>
               <span id="loadingText" style="display:none;"> Processing...</span>
             </button>
@@ -84,7 +62,7 @@
             <p class="h4 mb-2">{{ stage }}</p>
             {% if confidence %}
               <div class="progress" role="progressbar" aria-label="Confidence" aria-valuenow="{{ confidence|floatformat:0 }}"
-                   aria-valuemin="0" aria-valuemax="1" style="height: 25px;">
+                   aria-valuemin="0" aria-valuemax="100" style="height: 25px;">
                 <div class="progress-bar" style="width: {{ confidence|floatformat:0 }}%;">
                   {{ confidence|floatformat:0 }}% Confidence
                 </div>
@@ -100,10 +78,6 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <!-- Preview Script -->
   <script>
@@ -130,5 +104,4 @@
       }
     });
   </script>
-</body>
-</html>
+{% endblock %}
