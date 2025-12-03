@@ -91,6 +91,7 @@
     // Data from Django view
     const chartLabels = JSON.parse('{{ chart_labels|escapejs }}');
     const chartData = JSON.parse('{{ chart_data|escapejs }}');
+    const chartColors = JSON.parse('{{ chart_colors|escapejs }}');
 
     if (chartLabels.length > 0) {
         new Chart(ctx, {
@@ -99,14 +100,7 @@
             labels: chartLabels,
             datasets: [{
             data: chartData,
-            backgroundColor: [
-                '#2e7d32', // Dark Green
-                '#4caf50', // Green
-                '#81c784', // Light Green
-                '#a5d6a7', // Lighter Green
-                '#c8e6c9', // Pale Green
-                '#e8f5e9'  // Very Pale Green
-            ],
+            backgroundColor: chartColors,
             borderWidth: 0
             }]
         },
