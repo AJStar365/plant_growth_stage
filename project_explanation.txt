@@ -1,0 +1,79 @@
+# Plant Growth Stage Detector: Simplified Project Explanation
+
+This document provides a high-level overview of the Plant Growth Stage Detector project, focusing on its structure, the technologies used, and how the machine learning model integrates with the web application.
+
+## 1. Project Overview
+
+The core of this project is a web-based application that allows users to upload an image of a plant and receive an AI-powered prediction of its current growth stage (e.g., Seedling, Vegetative, Flowering, Fruiting).
+
+The system is built using two main pillars:
+*   **Web Framework:** Django (Python) handles the user interface, image uploading, and database management.
+*   **Machine Learning:** TensorFlow/Keras is used to train and run the deep learning model that performs the actual image classification.
+
+## 2. Django Project Structure
+
+Django is a "Model-View-Template" (MVT) framework. Here is how our project utilizes these components:
+
+### A. Project & App Organization
+*   **`plant_growth_stage/` (Project Configuration):** This folder contains the main settings for the entire project, such as database configurations, installed apps, and global URL routing.
+*   **`plant_app/` (The Application):** This is where the actual logic of our plant detector lives. It contains the views, models, and templates specific to this feature.
+
+### B. Key Files and Their Roles
+
+1.  **`plant_app/models.py` (The Database Model):**
+    *   This file defines the data structure for our application.
+    *   We created a `Prediction` model. Think of this as a blueprint for a database table.
+    *   Every time a user makes a prediction, we save a record containing:
+        *   The user who made it.
+        *   The image they uploaded.
+        *   The predicted growth stage.
+        *   The confidence score of the model.
+        *   The date and time.
+
+2.  **`plant_app/views.py` (The Logic / Controller):**
+    *   This is the "brain" of the application. It handles requests from the user.
+    *   **`index` view:**
+        *   Receives the image uploaded by the user.
+        *   Pre-processes the image (resizes it) to match what the AI model expects.
+        *   Passes the image to the loaded TensorFlow model to get a prediction.
+        *   Saves the result to the database.
+        *   Sends the result back to the webpage to be displayed.
+    *   **`dashboard` view:**
+        *   Retrieves the user's past predictions from the database.
+        *   Calculates statistics (e.g., how many plants are in the "Flowering" stage) for visualization.
+
+3.  **`plant_app/templates/` (The User Interface):**
+    *   These are the HTML files that the user sees in their browser.
+    *   **`index.html`:** The main page with the file upload form and the results display area. It uses Bootstrap for styling (progress bars, buttons).
+    *   **`dashboard.html`:** Displays the user's history and charts using JavaScript (Chart.js).
+    *   **`base.html`:** A master template that contains the common navigation bar and footer, ensuring a consistent look across all pages.
+
+4.  **`plant_app/urls.py` (URL Routing):**
+    *   This file maps web addresses (URLs) to specific "views" (functions).
+    *   For example, it tells Django that if a user visits `/dashboard/`, it should run the `dashboard` view function.
+
+## 3. Machine Learning Model Training
+
+The AI model is the engine that actually recognizes the plant stages. We used a technique called **Transfer Learning**.
+
+### The Process (`train_model.py`)
+
+1.  **Data Preparation:**
+    *   We started with a dataset of plant images organized into folders by category (Seedling, Vegetative, etc.).
+    *   We used an `ImageDataGenerator` to load these images and rescale their pixel values to a range of 0 to 1, which is easier for the AI to process.
+
+2.  **Model Architecture (InceptionV3):**
+    *   Instead of building a brain from scratch, we started with **InceptionV3**, a powerful pre-existing model developed by Google.
+    *   InceptionV3 has already "seen" millions of images (from the ImageNet dataset) and knows how to recognize shapes, edges, and textures.
+    *   We **removed the top layer** of InceptionV3 (which classifies things like cats and dogs) and replaced it with a **new custom layer** designed to classify our specific plant stages.
+
+3.  **Training (Fine-Tuning):**
+    *   **Phase 1 (Frozen):** We first trained only our new custom layer while keeping the InceptionV3 part "frozen" (unchanged). This allowed our new layer to learn the basics without messing up the pre-trained knowledge.
+    *   **Phase 2 (Fine-Tuning):** We then "unfroze" the top layers of InceptionV3 and trained the whole thing again with a very low learning rate. This allowed the model to subtly adjust its high-level understanding to be specifically better at distinguishing plant stages.
+
+4.  **Saving:**
+    *   The best performing version of the model was saved as a `.h5` file (`plant_growth_stage.h5`). This file is what the Django web app loads and uses to make predictions.
+
+## Summary
+
+In short, the user uploads an image to the **Django website**. The **View** processes it and hands it to the **TensorFlow Model** (which learned from our training data). The model returns a prediction, which the View saves to the **Database** and displays on the **Template** for the user.
