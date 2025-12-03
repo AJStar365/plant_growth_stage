@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import MobileNetV2
+from tensorflow.keras.applications import InceptionV3
 from tensorflow.keras.layers import GlobalAveragePooling2D, Dense, Dropout
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
@@ -17,14 +17,8 @@ val_dir = "dataset_resized/validation"
 # -------------------------
 # Data Generators
 # -------------------------
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    rotation_range=30,
-    zoom_range=0.2,
-    horizontal_flip=True,
-    width_shift_range=0.2,
-    height_shift_range=0.2
-)
+# Reduced augmentation as per v2 fixes
+train_datagen = ImageDataGenerator(rescale=1./255)
 
 val_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -38,9 +32,9 @@ val_gen = val_datagen.flow_from_directory(
 num_classes = train_gen.num_classes
 
 # -------------------------
-# Build Model (Transfer Learning)
+# Build Model (Transfer Learning - InceptionV3)
 # -------------------------
-base = MobileNetV2(weights='imagenet', include_top=False, input_shape=(224,224,3))
+base = InceptionV3(weights='imagenet', include_top=False, input_shape=(224,224,3))
 x = base.output
 x = GlobalAveragePooling2D()(x)
 x = Dropout(0.3)(x)
@@ -55,16 +49,23 @@ for layer in base.layers:
 # -------------------------
 # Compile Model
 # -------------------------
-model.compile(optimizer=Adam(learning_rate=0.0001),
+# Increased learning rate to 0.001 as per v2 fixes
+model.compile(optimizer=Adam(learning_rate=0.001),
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 # -------------------------
 # Callbacks
 # -------------------------
-callbacks = [
+callbacks_initial_train = [
     EarlyStopping(patience=5, restore_best_weights=True),
     ModelCheckpoint("best_plant_growth_stage.h5", save_best_only=True)
+]
+
+# Separate callbacks for fine-tuning to avoid OSError
+callbacks_finetune = [
+    EarlyStopping(patience=5, restore_best_weights=True),
+    ModelCheckpoint("best_plant_growth_stage_finetuned.h5", save_best_only=True)
 ]
 
 # -------------------------
@@ -74,13 +75,14 @@ history = model.fit(
     train_gen,
     validation_data=val_gen,
     epochs=20,
-    callbacks=callbacks
+    callbacks=callbacks_initial_train
 )
 
 # -------------------------
-# Fine-tune (unfreeze last 30 layers)
+# Fine-tune (unfreeze top 2 inception blocks)
 # -------------------------
-for layer in base.layers[-30:]:
+# Unfreezing from layer 249 as per v2 fixes
+for layer in base.layers[249:]:
     layer.trainable = True
 
 model.compile(optimizer=Adam(learning_rate=1e-5),
@@ -91,7 +93,7 @@ history_finetune = model.fit(
     train_gen,
     validation_data=val_gen,
     epochs=15,
-    callbacks=callbacks
+    callbacks=callbacks_finetune
 )
 
 # -------------------------

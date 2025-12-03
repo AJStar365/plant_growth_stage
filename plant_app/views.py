@@ -117,17 +117,16 @@ def index(request):
         filename = fs.save(uploaded_file.name, uploaded_file)
         img_url = fs.url(filename)
 
-        # Read image bytes for Nyckel API (if used)
+        # Read image bytes for Nyckel API
         uploaded_file.seek(0)  # Reset file pointer to the beginning
         image_bytes = uploaded_file.read()
 
-        if request.POST.get("use_nyckel") == "on":
-            stage, confidence = _classify_image_with_nyckel(image_bytes, filename)
-            if stage and confidence is not None:
-                pass # stage and confidence are already set
-            else:
-                error_message = "Nyckel API failed to classify the image. Check console for details."
-        else:
+        # 1. Try Nyckel API first
+        stage, confidence = _classify_image_with_nyckel(image_bytes, filename)
+
+        # 2. If Nyckel fails (stage is None), fallback to local model
+        if stage is None:
+            print("Nyckel API failed, falling back to local model...")
             try:
                 # Preprocess for local model
                 img_path = os.path.join(fs.location, filename)
@@ -139,8 +138,11 @@ def index(request):
                 preds = model.predict(img_array)
                 stage = CLASS_NAMES[np.argmax(preds)]
                 confidence = float(np.max(preds))
+                
+                # Clear error message if local model succeeds
+                error_message = None 
             except Exception as e:
-                error_message = f"Local model classification failed: {e}"
+                error_message = f"Both Nyckel API and Local model classification failed. Local Error: {e}"
                 stage = None
                 confidence = None
 

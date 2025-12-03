@@ -6,6 +6,7 @@ Changes:
 - Increased the initial learning rate from 0.0001 to 0.001 to help the model escape a poor local minimum.
 - Implemented separate `ModelCheckpoint` callbacks for the initial training and fine-tuning phases, saving to `best_plant_growth_stage.h5` and `best_plant_growth_stage_finetuned.h5` respectively. This resolves the `OSError: [Errno 22] Invalid argument` file access error during training.
 - Corrected an `IndentationError` in the fine-tuning `model.fit()` call to fix a syntax error preventing script execution.
+- Restored the InceptionV3-based training script content which was accidentally reverted to the MobileNetV2 version during branch operations.
 
 File: plant_app/views.py
 Changes:
@@ -24,6 +25,7 @@ Changes:
 - Modified the `index` view to initialize `error_message=None` and set `error_message` when classification fails (either local model or Nyckel API), passing it to the template context.
 - Implemented `admin_dashboard` view to list all users (superuser only).
 - Implemented `admin_user_dashboard` view to show a specific user's prediction dashboard (superuser only).
+- Modified the `index` view to implement automatic failover: it attempts classification with the Nyckel API first, and if that fails (returns None), it automatically falls back to the local TensorFlow model. The explicit check for the `use_nyckel` flag was removed.
 
 File: resize_dataset.py
 Changes:
@@ -40,6 +42,7 @@ Changes:
 - Removed inline styles from the `body` and `button` tags, moving them to `style.css` for better separation of concerns.
 - Added `text-shadow` to the main `h2` title to improve its contrast and readability against the background image.
 - Removed the `text-white` class from the "Detect Stage" button to allow the inline black color style to apply correctly.
+- Removed the "Use Nyckel API (Backup)" checkbox as the failover logic is now automatic.
 
 File: plant_growth_stage/settings.py
 Changes:
