@@ -110,6 +110,7 @@ def index(request):
     img_url = None
     stage = None # Ensure stage is initialized for template context
     error_message = None # Initialize error message
+    all_predictions = None # To store detailed breakdown
 
     if request.method == "POST" and request.FILES.get("plant_image"):
         uploaded_file = request.FILES["plant_image"]
@@ -123,6 +124,11 @@ def index(request):
 
         # 1. Try Nyckel API first
         stage, confidence = _classify_image_with_nyckel(image_bytes, filename)
+        
+        # If Nyckel succeeds, we currently don't get full breakdown, so all_predictions stays None
+        # Or we could wrap the single result into a list if we wanted consistent structure
+        if stage:
+             all_predictions = [{'label': stage, 'score': confidence}]
 
         # 2. If Nyckel fails (stage is None), fallback to local model
         if stage is None:
@@ -135,9 +141,18 @@ def index(request):
                 img_array = np.expand_dims(img_array, axis=0)
 
                 # Prediction with local model
-                preds = model.predict(img_array)
-                stage = CLASS_NAMES[np.argmax(preds)]
-                confidence = float(np.max(preds))
+                preds = model.predict(img_array)[0] # Get probabilities for the single image
+                
+                # Create detailed breakdown
+                all_predictions = []
+                for i, score in enumerate(preds):
+                    all_predictions.append({'label': CLASS_NAMES[i], 'score': float(score)})
+                
+                # Sort by score descending
+                all_predictions.sort(key=lambda x: x['score'], reverse=True)
+
+                stage = all_predictions[0]['label']
+                confidence = all_predictions[0]['score']
                 
                 # Clear error message if local model succeeds
                 error_message = None 
@@ -145,6 +160,7 @@ def index(request):
                 error_message = f"Both Nyckel API and Local model classification failed. Local Error: {e}"
                 stage = None
                 confidence = None
+                all_predictions = None
 
         # Save prediction if user is logged in and prediction was successful
         if request.user.is_authenticated and stage:
@@ -160,7 +176,8 @@ def index(request):
         "img_url": img_url,
         "stage": stage,
         "confidence": confidence,
-        "error_message": error_message
+        "error_message": error_message,
+        "all_predictions": all_predictions
     })
 
 @login_required

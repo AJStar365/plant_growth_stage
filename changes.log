@@ -26,6 +26,7 @@ Changes:
 - Implemented `admin_dashboard` view to list all users (superuser only).
 - Implemented `admin_user_dashboard` view to show a specific user's prediction dashboard (superuser only).
 - Modified the `index` view to implement automatic failover: it attempts classification with the Nyckel API first, and if that fails (returns None), it automatically falls back to the local TensorFlow model. The explicit check for the `use_nyckel` flag was removed.
+- Updated the `index` view to calculate and return a full list of class probabilities (`all_predictions`) from the local model for detailed display.
 
 File: resize_dataset.py
 Changes:
@@ -43,6 +44,8 @@ Changes:
 - Added `text-shadow` to the main `h2` title to improve its contrast and readability against the background image.
 - Removed the `text-white` class from the "Detect Stage" button to allow the inline black color style to apply correctly.
 - Removed the "Use Nyckel API (Backup)" checkbox as the failover logic is now automatic.
+- Replaced the confidence progress bar with a simple text percentage display.
+- Added a collapsible "Additional Info" section to display the full breakdown of class probabilities returned by the local model.
 
 File: plant_growth_stage/settings.py
 Changes:
